@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Zilla+Slab');
 body{
 	font-family: 'Zilla Slab', serif;
 }
@@ -8,7 +7,7 @@ body{
 	margin: auto;
 }
 
-p{
+div[class^="subscribe"]{
 	margin-left: 2%;
 	color: #2F6245;
 }
@@ -41,7 +40,6 @@ h3{
 	background-color: rgba(0,0,0,0.8);
 }
 .mySlides{
-	/*text-align: center;*/
 	max-height: 700px;
 	height: 70%;
 }
@@ -85,16 +83,12 @@ img{
 	animation-name:fade;
 	animation-duration:1s;
 }
-/*@-webkit-keyframes fade{
-	0%{opacity:0.4;}
-	100%{opacity:1;}
-}*/
 @keyframes fade{
 	0%{opacity:0.4;}
 	100%{opacity:1;}
 }
 
-a.button7 {
+a.movie-button {
   font-weight: 700;
   color: white;
   text-decoration: none;
@@ -104,16 +98,23 @@ a.button7 {
   box-shadow: 0 -3px rgb(53,167,110) inset;
   transition: 0.2s;
 } 
-a.button7:hover { background: rgb(53, 167, 110); }
-a.button7:active {
+a.movie-button:hover { background: rgb(53, 167, 110); }
+a.movie-button:active {
   background: rgb(33,147,90);
   box-shadow: 0 3px rgb(33,147,90) inset;
 }
 
-#film_name{
+.film_name{
 	height: 35px;
 	font-size: 30px;
 	border-radius: 5px;
 	color: #111111;
 	border: 1px solid green;
+}
+.input-contaner{
+	text-align: center; position: fixed; left: 35%; width:30%; top: 75%;
+}
+
+.dot_container{
+	text-align:center;
 }

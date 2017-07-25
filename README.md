@@ -1,0 +1,1 @@
+This project shows the possibilityes of jQuery ajax to deliver data from the server. At the beginning user gets 5 randomly rendered movies taken from OMDB API. The he may make a request to the API and get any movies he wants to find.

@@ -1,6 +1,5 @@
 'use strict';
 var slideIndex=1, SLIDES_NUM = 5, arr = [];
-showSlides(slideIndex);
 
 function plusSlides(n){
     if(n<0 && slideIndex == 1) return;
@@ -34,18 +33,29 @@ function showSlides(n){
     }
 }
 
-
 (function(){
-    //setDots();
-    var index = 0;
+    showSlides(slideIndex);
+    for(var i = 0; i<10; i++)
+    {
+        $('.slidershow-container')[0].innerHTML =
+            '<div class="mySlides fade">'+
+            '<img src="img/no_photo.png">'+
+            '<div class="subscribe title"></div>'+
+            '<div class="subscribe year"></div>'+
+            '<div class="subscribe country"></div>'+
+            '<div class="subscribe director"></div>'+
+            '<div class="subscribe genre"></div>'+
+            '<div class="subscribe plot"></div>'+
+    '</div>'+$('.slidershow-container')[0].innerHTML;
+    }
+    $('.movie-button')[0].addEventListener('click', do_something);
     random_request();
 })();
-
 
 function do_something() {
     try {
         var use_func = true;
-        var URL = "http://www.omdbapi.com/?t=", pt = document.getElementById('film_name').value.split(' ');
+        var URL = "http://www.omdbapi.com/?t=", pt = $('.film_name')[0].value.split(' ');
         URL += pt[0];
         for (var i = 1; i < pt.length; i++) {
             URL += ("+" + pt[i]);
@@ -95,15 +105,28 @@ function do_something() {
     }
 }
 
+function fill_slide(i)
+{
+    var slide = $('.mySlides')[i];
+    if (arr[i].Poster == "N/A") slide.getElementsByTagName('img')[0].src = "img/no_photo.png";
+    else slide.getElementsByTagName('img')[0].src = arr[i].Poster;
+    slide.getElementsByClassName('title')[0].innerHTML = '<h1>Title: </h1>' + '<h3>' + arr[i].Title + '</h3>';
+    slide.getElementsByClassName('year')[0].innerHTML = '<h1>Year: </h1>' + '<h3>' + arr[i].Year + '</h3>';
+    slide.getElementsByClassName('country')[0].innerHTML = '<h1>Country: </h1>' + '<h3>' + arr[i].Country + '</h3>';
+    slide.getElementsByClassName('director')[0].innerHTML = '<h1>Director: </h1>' + '<h3>' + arr[i].Director + '</h3>';
+    slide.getElementsByClassName('genre')[0].innerHTML = '<h1>Genre: </h1>' + '<h3>' + arr[i].Genre + '</h3>';
+    slide.getElementsByClassName('plot')[0].innerHTML = '<h1>Plot: </h1>' + '<h3>' + arr[i].Plot + '</h3>';
+}
+
 function commit()
 {
-    try {
+    var prom = new Promise(function (resolved, rejected) {
         SLIDES_NUM = (arr.length > 10) ? 10 : arr.length;
         console.log("Setting dots " + SLIDES_NUM);
         console.log(arr);
-        while (document.getElementById('dot_count').hasChildNodes()) {
-            var node = document.getElementById('dot_count').firstChild;
-            document.getElementById('dot_count').removeChild(node);
+        while ($('.dot_container')[0].hasChildNodes()) {
+            var node = $('.dot_container')[0].firstChild;
+            $('.dot_container')[0].removeChild(node);
         }
         var elem;
         for (var i = 0; i < SLIDES_NUM; i++) {
@@ -112,30 +135,25 @@ function commit()
             elem.onclick = currentSlide(i);
             var id = "dot_" + i;
             elem.id = id;
-            document.getElementById('dot_count').appendChild(elem);
-            document.getElementById(id).setAttribute('onclick', 'currentSlide(' + (i + 1) + ')');
+            elem.setAttribute('onclick', 'currentSlide(' + (i + 1) + ')');
+            $('.dot_container')[0].appendChild(elem);
         }
         for (i = 0; i < SLIDES_NUM; i++) {
-            var slide = document.getElementsByClassName('mySlides')[i];
-            if (arr[i].Poster == "N/A") slide.getElementsByTagName('img')[0].src = "img/no_photo.png";
-            else slide.getElementsByTagName('img')[0].src = arr[i].Poster;
-            slide.getElementsByTagName('p')[0].innerHTML = '<h1>Title: </h1>' + '<h3>' + arr[i].Title + '</h3>';
-            slide.getElementsByTagName('p')[1].innerHTML = '<h1>Year: </h1>' + '<h3>' + arr[i].Year + '</h3>';
-            slide.getElementsByTagName('p')[2].innerHTML = '<h1>Country: </h1>' + '<h3>' + arr[i].Country + '</h3>';
-            slide.getElementsByTagName('p')[3].innerHTML = '<h1>Director: </h1>' + '<h3>' + arr[i].Director + '</h3>';
-            slide.getElementsByTagName('p')[4].innerHTML = '<h1>Genre: </h1>' + '<h3>' + arr[i].Genre + '</h3>';
-            slide.getElementsByTagName('p')[5].innerHTML = '<h1>Plot: </h1>' + '<h3>' + arr[i].Plot + '</h3>';
+            fill_slide(i);
         }
         arr = [];
-    }catch(e)
-    {
-        console.log(e);
-    }
+        resolved("GOOD");
+    });
+    prom.then(function (res) {
+        console.log(res)
+    }, function (err) {
+        console.log(err);
+    });
 }
 
 function random_request()
 {
-    try {
+    var prom = new Promise(function (resolved, rejected) {
         var use_func = true;
         for (var i = 0; i < 15; i++) {
             var rand_id = 1000000 + Math.floor(Math.random() * 1200000) % 1200000;
@@ -143,7 +161,6 @@ function random_request()
             var URL = "http://www.omdbapi.com/?i=" + rand_id;
             var key = "&apikey=ec6483bd";
             URL += key;
-            //console.log("url = " + URL);
             $.ajax({
                 url: URL,
                 cache: false,
@@ -168,9 +185,12 @@ function random_request()
                     commit();
                 }
             });
+            resolved("NICE");
         }
-    }catch(e)
-    {
-        console.log(e);
-    }
+    });
+    prom.then(function (res) {
+        console.log(res)
+    }, function (err) {
+        console.log(err);
+    });
 }
